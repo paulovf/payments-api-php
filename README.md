@@ -29,14 +29,52 @@ In addition, [Laracasts](https://laracasts.com) contains thousands of video tuto
 
 You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
 
-## Agentic Development
+## Run project
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Using docker, run project:
 
 ```bash
-composer require laravel/boost --dev
+docker-compose build
+docker-compose up
+```
 
-php artisan boost:install
+run migrates
+
+```bash
+docker compose exec php php artisan migrate
+```
+
+run php bash mode
+
+```bash
+docker compose exec -e HOME=/tmp php php artisan tinker
+```
+
+create user for api tests
+
+```bash
+docker compose exec -e HOME=/tmp php php artisan tinker
+$user = App\Models\User::create([
+    'name' => 'Payments API Client',
+    'email' => 'api-client@example.com',
+    'password' => Illuminate\Support\Facades\Hash::make('temporary-password'),
+]);
+
+$token = $user->createToken('payments-api')->plainTextToken;
+```
+
+example api use
+
+```bash
+curl -i http://localhost:8080/api/accounts   -H "Accept: application/json"   -H "Authorization: Bearer your_user_token"
+```
+
+## Run tests
+
+For run unitary tests, run
+
+```bash
+docker compose exec php php artisan test
 ```
 
 Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
